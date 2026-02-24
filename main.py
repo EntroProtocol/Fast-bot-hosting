@@ -3,21 +3,19 @@ import os
 from flask import Flask
 from threading import Thread
 
-# --- KONFIGURIMI FINAL DHE I SIGURT ---
+# --- KONFIGURIMI I BLINDUAR ---
 TOKEN = "8728522462:AAFCmo5DFol1wzr23sFvZOt--IUx9aukgoU"
-# ID-ja jote e saktë për kontrollin e sistemit
 ADMIN_ID = 7954635482 
 
-bot = telebot.TeleBot(TOKEN)
+# SHTO kete: threaded=False (shume e rendesishme per Render Free)
+bot = telebot.TeleBot(TOKEN, threaded=False) 
 app = Flask(__name__)
 
 @app.route('/')
 def home():
-    # Pergjigje minimale per te shmangur "Output too large" ne Cron-job
-    return "OK"
+    return "OK", 200
 
 def run():
-    # Perdorum porten 8080 qe eshte me e qendrueshme ne Render
     port = int(os.environ.get('PORT', 8080))
     app.run(host='0.0.0.0', port=port)
 
@@ -27,12 +25,17 @@ def keep_alive():
     t.start()
 
 @bot.message_handler(func=lambda message: message.from_user.id == ADMIN_ID)
-@bot.message_handler(commands=['start', 'snipe'])
 def handle_admin(message):
-    bot.reply_to(message, f"👿 Sistemi Sniper u lidh me ID-në tënde: {ADMIN_ID}\n\nStatusi: ONLINE 24/7 dhe gati për gjueti!")
+    bot.reply_to(message, "👿 Sistemi Sniper ONLINE 24/7!")
+
+# SHTO kete handler per te testuar nese boti te sheh
+@bot.message_handler(func=lambda message: True)
+def echo_all(message):
+    print(f"Mesazh nga: {message.from_user.id}")
+    if message.from_user.id == ADMIN_ID:
+        bot.reply_to(message, "Te njoha! Jam gati.")
 
 if __name__ == "__main__":
     keep_alive()
-    print("🤖 Bot is starting...")
-    # non_stop=True siguron qe boti te mos fiket nga gabimet e rrjetit
-    bot.infinity_polling(non_stop=True)
+    # Perdorum polling te thjeshte per stabilitet
+    bot.polling(none_stop=True, interval=0, timeout=20)
