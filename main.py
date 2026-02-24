@@ -3,7 +3,7 @@ import os
 from flask import Flask
 from threading import Thread
 
-# --- KONFIGURIMI ---
+# --- KONFIGURIMI I BLINDUAR ---
 TOKEN = "8728522462:AAFCmo5DFol1wzr23sFvZOt--IUx9aukgoU"
 bot = telebot.TeleBot(TOKEN)
 app = Flask('')
@@ -13,8 +13,8 @@ def home():
     return "Sniper is Awake!"
 
 def run():
-    # Render kerkon porten 10000 ose 8080
-    port = int(os.environ.get('PORT', 8080))
+    # RREGULLIMI I PORTES: Render kerkon PORT 10000 automatikisht
+    port = int(os.environ.get('PORT', 10000))
     app.run(host='0.0.0.0', port=port)
 
 def keep_alive():
@@ -23,8 +23,10 @@ def keep_alive():
 
 @bot.message_handler(commands=['start', 'snipe'])
 def welcome(message):
-    bot.reply_to(message, "👿 Sistemi Sniper është ONLINE 24/7!\n\nDuke skanuar rrjetin për mbetje dhe arbitrazh...")
+    bot.reply_to(message, "👿 Sistemi Sniper u aktivizua dhe është i pandalshëm!")
 
 if __name__ == "__main__":
-    keep_alive() # Nis serverin web per Cron-job
-    bot.infinity_polling()
+    keep_alive()
+    print("🤖 Bot is starting...")
+    # Shtohet non_stop=True per stabilitet ne servera falas
+    bot.infinity_polling(non_stop=True)
