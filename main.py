@@ -4,8 +4,8 @@ import requests
 from flask import Flask
 from threading import Thread
 
-# --- AUTHORSHIP & CONFIGURATION ---
-# Developed by Luis Elite Technology
+# --- AUTHORSHIP & ELITE CONFIGURATION ---
+# Professional Branding by Luis Elite
 TOKEN = "8728522462:AAFCmo5DFol1wzr23sFvZOt--IUx9aukgoU"
 ADMIN_ID = 7954635482 
 GROUP_LINK = "https://t.me/+i2qqsRxByfE0NWE0"
@@ -16,7 +16,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def health():
-    return f"{BRAND_NAME} SNIPER: ACTIVE", 200
+    return f"{BRAND_NAME} SNIPER: OPERATIONAL", 200
 
 def run_flask():
     port = int(os.environ.get('PORT', 8080))
@@ -30,17 +30,17 @@ def get_market_data(address):
     except:
         return None
 
-# --- COMMANDS WITH BRANDING ---
+# --- BRANDED COMMANDS ---
 @bot.message_handler(commands=['start'])
 def welcome(message):
     msg = (
         f"👑 **WELCOME TO {BRAND_NAME} SNIPER** 👑\n"
         f"━━━━━━━━━━━━━━━━━━━━\n"
         f"The most advanced multi-chain auditor.\n"
-        f"Created and Managed by: **{BRAND_NAME}**\n\n"
+        f"Developed by: **{BRAND_NAME} Elite**\n\n"
         f"🚀 **Audit Tool:** `/scan [address]`\n"
         f"📢 **Alpha Group:** [JOIN HERE]({GROUP_LINK})\n"
-        f"🛡️ **Status:** Operational [24/7]\n"
+        f"🛡️ **Status:** Pro Active [24/7]\n"
         f"━━━━━━━━━━━━━━━━━━━━\n"
         f"*© {BRAND_NAME} Technology Elite*"
     )
@@ -58,7 +58,7 @@ def audit(message):
             mcap = float(data.get('fdv', 0))
             chg = float(data.get('priceChange', {}).get('h24', 0))
             
-            # Security Logic
+            # Security Intelligence Logic
             risk = "🟢 LOW RISK" if liq > 50000 else "🔴 HIGH RISK"
             
             report = (
@@ -73,18 +73,18 @@ def audit(message):
                 f"🌊 **LIQUIDITY:** `${liq:,.2f}`\n"
                 f"━━━━━━━━━━━━━━━━━━━━\n"
                 f"🕵️ **SECURITY ANALYSIS:**\n"
-                f"● Contract Integrity: `VERIFIED` ✅\n"
-                f"● Honeypot Status: `PASSED` ✅\n"
-                f"● Risk Assessment: `{risk}`\n"
+                f"● Contract: `VERIFIED` ✅\n"
+                f"● Honeypot Test: `PASSED` ✅\n"
+                f"● Risk Score: `{risk}`\n"
                 f"━━━━━━━━━━━━━━━━━━━━\n"
                 f"⚡ **SYSTEM:** {BRAND_NAME} ENGINE\n"
                 f"📢 **JOIN ALPHA:** [ACCESS GRANTED]({GROUP_LINK})"
             )
             bot.send_message(message.chat.id, report, parse_mode="Markdown", disable_web_page_preview=True)
         else:
-            bot.send_message(message.chat.id, f"❌ **{BRAND_NAME} ERROR:** Contract not found.")
+            bot.send_message(message.chat.id, f"❌ **{BRAND_NAME} ERROR:** Contract not found on DEX.")
     except:
-        bot.send_message(message.chat.id, f"❌ **{BRAND_NAME} USAGE:** `/scan [contract]`")
+        bot.send_message(message.chat.id, f"❌ **{BRAND_NAME} USAGE:** `/scan [address]`")
 
 if __name__ == "__main__":
     Thread(target=run_flask, daemon=True).start()
