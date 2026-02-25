@@ -1,2 +1,6 @@
-pyTelegramBotAPI
+aiogram
+aiohttp
 flask
+requests
+gunicorn
+pydantic
