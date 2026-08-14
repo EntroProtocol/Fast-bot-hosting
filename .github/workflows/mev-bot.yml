@@ -1,0 +1,37 @@
+name: Virtuals MEV Bot
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+jobs:
+  mev-bot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      
+      - name: Install dependencies
+        run: |
+          pip install web3 requests
+      
+      - name: Run MEV Bot
+        env:
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          WALLET_ADDRESS: ${{ secrets.WALLET_ADDRESS }}
+          FLASHARB_CONTRACT: ${{ secrets.FLASHARB_CONTRACT }}
+          ARBFIX_CONTRACT: ${{ secrets.ARBFIX_CONTRACT }}
+        run: python3 mev_bot.py
+      
+      - name: Upload summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: bot-summary
+          path: bot_summary.json
+          retention-days: 7
